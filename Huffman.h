@@ -41,6 +41,7 @@ private:
     //存储结点频率以及其他信息的函数
     void readFile();
     //读取文件的函数
+    void Search (int &i1, int &i2);
 
 public:
     HuffmanTree();
@@ -49,7 +50,6 @@ public:
     //编码函数
     void Decode();
     //译码函数
-    void Search (int &i1, int &i2);
 };
 
 HuffmanTree::HuffmanTree()
@@ -156,12 +156,9 @@ void HuffmanTree::Search(int &i1, int &i2)
 
 void HuffmanTree::readFile()
 {
-    string inName;
-    cout << "请输入要编码的文件名:" <<endl;
-    cin >>inName ;
-    //存入输入的文件名
+
     ifstream in;
-    in.open(inName, ios::in);
+    in.open("in.txt", ios::in);
     //打开对应文件
     if(!in.is_open())
     {
@@ -170,6 +167,8 @@ void HuffmanTree::readFile()
     }
     in >> S;
     //将文件内容保存至S
+    cout <<"文件内容为:" << S <<endl;
+    //输出文件内容
     in.close();
 }
 
@@ -225,6 +224,7 @@ void HuffmanTree::Encode()
     string str = "";
     element *p = &root;
     char c;
+    cout << "编码表如下" << endl;
     while(p !=NULL)
     {
         if(root.left->visit == true&&root.right->visit ==true) break;
@@ -261,6 +261,8 @@ void HuffmanTree::Encode()
             str.pop_back();
         }
     }
+    cout << "编码为：";
+    ofstream out("out.txt",ios::out);
     while (S.length()!=0)
     {
         c = S.at(0);
@@ -271,16 +273,54 @@ void HuffmanTree::Encode()
           if(c == huffTree[i].data)
           {
               cout <<huffTree[i].code;
+              out <<huffTree[i].code;
               break;
           }
-          //将字符串中的字母替换成编码
+          //将字符串中的字母替换成编码并保存到文件out.txt中
           i++;
         }
         S.erase(0,1);
     }
+    ofstream code("code.txt",ios::out);
+    for(i=0;i<num;i++)
+    {
+        code << huffTree[i].data <<" : "<< huffTree[i].code<<endl;
+    }
+    //将其输出为编码表code.txt
+    code.close();
 }
 
+void HuffmanTree::Decode()
+{
+    int len = 0;
+    //编码的长度函数len
+    string str;
+    ifstream in("out.txt",ios::in);
+    //输入编码
+    in >> str;
+    in.close();
+    //输入编码至str
+    ofstream out("oriFile.txt",ios::out);
+    int i = 0;
+    cout << endl << "解码得到的内容为：" <<endl;
+    while(str != "")
+    {
+        for (i = 0; i < num; i++)
+        {
+            //循环得到各个字符的编码并依次与哈夫曼编码对比
+            len = huffTree[i].code.length();
+            if (huffTree[i].code == str.substr(0, len))
+            {
+                cout << huffTree[i].data ;
+                //找到编码对应的字符则输出该字符
+                str.erase(0 , len);
+            }
+        }
+    }
 
+    out.close();
+
+}
 
 //
 
