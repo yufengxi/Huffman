@@ -156,9 +156,11 @@ void HuffmanTree::Search(int &i1, int &i2)
 
 void HuffmanTree::readFile()
 {
-
+    string inName;
+    cout <<"请输入要打开的文件名:";
+    cin >> inName ;
     ifstream in;
-    in.open("in.txt", ios::in);
+    in.open(inName, ios::in);
     //打开对应文件
     if(!in.is_open())
     {
@@ -220,10 +222,12 @@ void HuffmanTree::countLetter()
 
 void HuffmanTree::Encode()
 {
+
     int i = 0;
     string str = "";
     element *p = &root;
     char c;
+
     cout << "编码表如下" << endl;
     while(p !=NULL)
     {
@@ -292,13 +296,12 @@ void HuffmanTree::Encode()
 
 void HuffmanTree::Decode()
 {
+
     int len = 0;
     //编码的长度函数len
     string str;
-    ifstream in("out.txt",ios::in);
-    //输入编码
-    in >> str;
-    in.close();
+    cout << endl << "请输入哈夫曼编码:";
+    cin >> str;
     //输入编码至str
     ofstream out("oriFile.txt",ios::out);
     int i = 0;
